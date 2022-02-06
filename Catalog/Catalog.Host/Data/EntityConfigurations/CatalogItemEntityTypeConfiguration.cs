@@ -7,28 +7,15 @@ public class CatalogItemEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<CatalogItem> builder)
     {
-        builder.ToTable("Catalog");
-
-        builder.Property(ci => ci.Id)
-            .UseHiLo("catalog_hilo")
-            .IsRequired();
-
-        builder.Property(ci => ci.Name)
-            .IsRequired(true)
+        builder.ToTable("CatalogItem");
+        builder.HasKey(ci => ci.Id);
+        builder.Property(ci => ci.Title)
+            .IsRequired()
             .HasMaxLength(50);
-
-        builder.Property(ci => ci.Price)
-            .IsRequired(true);
-
-        builder.Property(ci => ci.PictureFileName)
-            .IsRequired(false);
-
-        builder.HasOne(ci => ci.CatalogBrand)
-            .WithMany()
-            .HasForeignKey(ci => ci.CatalogBrandId);
-
-        builder.HasOne(ci => ci.CatalogType)
-            .WithMany()
-            .HasForeignKey(ci => ci.CatalogTypeId);
+        builder.Property(ci => ci.CoverFileName).IsRequired(false);
+        builder.Property(ci => ci.Imdb).IsRequired();
+        builder.Property(ci => ci.Year).IsRequired();
+        builder.Property(ci => ci.Description).IsRequired();
+        builder.Property(ci => ci.Price).IsRequired();
     }
 }

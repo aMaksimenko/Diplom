@@ -23,39 +23,73 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
         _mapper = mapper;
     }
 
-    public async Task<PaginatedItemsResponse<CatalogItemDto>?> GetCatalogItemsAsync(int pageSize, int pageIndex, Dictionary<CatalogTypeFilter, int>? filters)
+    public async Task<PaginatedItemsResponse<CatalogItemDto>?> GetCatalogItemsAsync(
+        int pageSize,
+        int pageIndex,
+        Dictionary<CatalogTypeFilter, int>? filters)
     {
-        return await ExecuteSafeAsync(async () =>
-        {
-            int? brandFilter = null;
-            int? typeFilter = null;
-
-            if (filters != null)
+        return await ExecuteSafeAsync(
+            async () =>
             {
-                if (filters.TryGetValue(CatalogTypeFilter.Brand, out var brand))
+                int? genreFilter = null;
+
+                if (filters != null)
                 {
-                    brandFilter = brand;
+                    if (filters.TryGetValue(CatalogTypeFilter.Genre, out var genre))
+                    {
+                        genreFilter = genre;
+                    }
                 }
 
-                if (filters.TryGetValue(CatalogTypeFilter.Type, out var type))
+                var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, genreFilter);
+
+                if (result == null)
                 {
-                    typeFilter = type;
+                    return null;
                 }
-            }
 
-            var result = await _catalogItemRepository.GetByPageAsync(pageIndex, pageSize, brandFilter, typeFilter);
-            if (result == null)
-            {
-                return null;
-            }
+                var response = new PaginatedItemsResponse<CatalogItemDto>()
+                {
+                    Count = result.TotalCount,
+                    Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList(),
+                    PageIndex = pageIndex,
+                    PageSize = pageSize
+                };
 
-            return new PaginatedItemsResponse<CatalogItemDto>()
+                return response;
+            });
+    }
+
+    public async Task<CatalogItemDto> GetByIdAsync(int id)
+    {
+        return await ExecuteSafeAsync(
+            async () =>
             {
-                Count = result.TotalCount,
-                Data = result.Data.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList(),
-                PageIndex = pageIndex,
-                PageSize = pageSize
-            };
-        });
+                var result = await _catalogItemRepository.GetByIdAsync(id);
+
+                return _mapper.Map<CatalogItemDto>(result);
+            });
+    }
+
+    public async Task<IEnumerable<CatalogItemDto>> GetByGenreAsync(int genreId)
+    {
+        return await ExecuteSafeAsync(
+            async () =>
+            {
+                var result = await _catalogItemRepository.GetByGenreAsync(genreId);
+
+                return result.Select(s => _mapper.Map<CatalogItemDto>(s)).ToList();
+            });
+    }
+
+    public async Task<IEnumerable<CatalogGenreDto>> GetGenresAsync()
+    {
+        return await ExecuteSafeAsync(
+            async () =>
+            {
+                var result = await _catalogItemRepository.GetGenresAsync();
+
+                return result.Select(s => _mapper.Map<CatalogGenreDto>(s)).ToList();
+            });
     }
 }

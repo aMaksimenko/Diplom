@@ -38,10 +38,32 @@ public class CatalogBffController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public IActionResult GetBrands()
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(CatalogItemDto), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetById(int id)
     {
-        _logger.LogInformation($"User Id {User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value}");
-        return Ok();
+        var result = await _catalogService.GetByIdAsync(id);
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(CatalogItemDto), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetByGenre(int genreId)
+    {
+        var result = await _catalogService.GetByGenreAsync(genreId);
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(IEnumerable<CatalogGenreDto>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetGenres()
+    {
+        var result = await _catalogService.GetGenresAsync();
+
+        return Ok(result);
     }
 }

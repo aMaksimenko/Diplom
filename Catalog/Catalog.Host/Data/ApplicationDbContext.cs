@@ -11,13 +11,18 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<CatalogItem> CatalogItems { get; set; } = null!;
-    public DbSet<CatalogBrand> CatalogBrands { get; set; } = null!;
-    public DbSet<CatalogType> CatalogTypes { get; set; } = null!;
+    public DbSet<CatalogGenre> CatalogGenres { get; set; } = null!;
+    public DbSet<CatalogItemGenre> CatalogItemGenres { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
-        builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
         builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogGenreEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogItemGenreEntityTypeConfiguration());
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.LogTo(Console.WriteLine);
     }
 }

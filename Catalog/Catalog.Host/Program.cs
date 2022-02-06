@@ -1,4 +1,3 @@
-using Catalog.Host;
 using Catalog.Host.Configurations;
 using Catalog.Host.Data;
 using Catalog.Host.Repositories;
@@ -13,43 +12,45 @@ var configuration = GetConfiguration();
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers(options =>
-    {
-        options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-    })
+builder.Services.AddControllers(options => { options.Filters.Add(typeof(HttpGlobalExceptionFilter)); })
     .AddJsonOptions(options => options.JsonSerializerOptions.WriteIndented = true);
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
+builder.Services.AddSwaggerGen(
+    options =>
     {
-        Title = "eShop- Catalog HTTP API",
-        Version = "v1",
-        Description = "The Catalog Service HTTP API"
-    });
-
-    var authority = configuration["Authorization:Authority"];
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Type = SecuritySchemeType.OAuth2,
-        Flows = new OpenApiOAuthFlows()
-        {
-            Implicit = new OpenApiOAuthFlow()
+        options.SwaggerDoc(
+            "v1",
+            new OpenApiInfo
             {
-                AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
-                TokenUrl = new Uri($"{authority}/connect/token"),
-                Scopes = new Dictionary<string, string>()
-                {
-                    { "mvc", "website" },
-                    { "catalog.catalogbff", "catalog.catalogbff" },
-                    { "catalog.catalogitem", "catalog.catalogitem" }
-                }
-            }
-        }
-    });
+                Title = "eShop- Catalog HTTP API",
+                Version = "v1",
+                Description = "The Catalog Service HTTP API"
+            });
 
-    options.OperationFilter<AuthorizeCheckOperationFilter>();
-});
+        var authority = configuration["Authorization:Authority"];
+        options.AddSecurityDefinition(
+            "oauth2",
+            new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new OpenApiOAuthFlows()
+                {
+                    Implicit = new OpenApiOAuthFlow()
+                    {
+                        AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                        TokenUrl = new Uri($"{authority}/connect/token"),
+                        Scopes = new Dictionary<string, string>()
+                        {
+                            { "mvc", "description" },
+                            { "catalog.catalogitem", "description" },
+                            { "catalog.cataloggenre", "description" }
+                        }
+                    }
+                }
+            });
+
+        options.OperationFilter<AuthorizeCheckOperationFilter>();
+    });
 
 builder.AddConfiguration();
 builder.Services.Configure<CatalogConfig>(configuration);
@@ -59,32 +60,36 @@ builder.Services.AddAuthorization(configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddTransient<ICatalogItemRepository, CatalogItemRepository>();
+builder.Services.AddTransient<ICatalogGenreRepository, CatalogGenreRepository>();
 builder.Services.AddTransient<ICatalogService, CatalogService>();
 builder.Services.AddTransient<ICatalogItemService, CatalogItemService>();
+builder.Services.AddTransient<ICatalogGenreService, CatalogGenreService>();
 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(opts => opts.UseNpgsql(configuration["ConnectionString"]));
 builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>, DbContextWrapper<ApplicationDbContext>>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(
-        "CorsPolicy",
-        builder => builder
-            .SetIsOriginAllowed((host) => true)
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
-});
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy(
+            "CorsPolicy",
+            builder => builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+    });
 
 var app = builder.Build();
 
 app.UseSwagger()
-    .UseSwaggerUI(setup =>
-    {
-        setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1");
-        setup.OAuthClientId("catalogswaggerui");
-        setup.OAuthAppName("Catalog Swagger UI");
-    });
+    .UseSwaggerUI(
+        setup =>
+        {
+            setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1");
+            setup.OAuthClientId("catalogswaggerui");
+            setup.OAuthAppName("Catalog Swagger UI");
+        });
 
 app.UseRouting();
 app.UseCors("CorsPolicy");
@@ -92,11 +97,12 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-    endpoints.MapControllers();
-});
+app.UseEndpoints(
+    endpoints =>
+    {
+        endpoints.MapDefaultControllerRoute();
+        endpoints.MapControllers();
+    });
 
 CreateDbIfNotExists(app);
 app.Run();

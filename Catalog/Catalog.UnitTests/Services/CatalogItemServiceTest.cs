@@ -13,13 +13,12 @@ public class CatalogItemServiceTest
 
     private readonly CatalogItem _testItem = new CatalogItem()
     {
-        Name = "Name",
+        Title = "Title",
+        CoverFileName = "fileName.png",
+        Imdb = 7.8,
+        Year = 1985,
         Description = "Description",
-        Price = 1000,
-        AvailableStock = 100,
-        CatalogBrandId = 1,
-        CatalogTypeId = 1,
-        PictureFileName = "1.png"
+        Price = 4.5,
     };
 
     public CatalogItemServiceTest()
@@ -29,9 +28,13 @@ public class CatalogItemServiceTest
         _logger = new Mock<ILogger<CatalogService>>();
 
         var dbContextTransaction = new Mock<IDbContextTransaction>();
-        _dbContextWrapper.Setup(s => s.BeginTransactionAsync(It.IsAny<CancellationToken>())).ReturnsAsync(dbContextTransaction.Object);
+        _dbContextWrapper.Setup(s => s.BeginTransactionAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(dbContextTransaction.Object);
 
-        _catalogService = new CatalogItemService(_dbContextWrapper.Object, _logger.Object, _catalogItemRepository.Object);
+        _catalogService = new CatalogItemService(
+            _dbContextWrapper.Object,
+            _logger.Object,
+            _catalogItemRepository.Object);
     }
 
     [Fact]
@@ -40,17 +43,23 @@ public class CatalogItemServiceTest
         // arrange
         var testResult = 1;
 
-        _catalogItemRepository.Setup(s => s.Add(
-            It.IsAny<string>(),
-            It.IsAny<string>(),
-            It.IsAny<decimal>(),
-            It.IsAny<int>(),
-            It.IsAny<int>(),
-            It.IsAny<int>(),
-            It.IsAny<string>())).ReturnsAsync(testResult);
+        _catalogItemRepository.Setup(
+            s => s.CreateAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<double>(),
+                It.IsAny<int>(),
+                It.IsAny<double>())).ReturnsAsync(testResult);
 
         // act
-        var result = await _catalogService.AddAsync(_testItem.Name, _testItem.Description, _testItem.Price, _testItem.AvailableStock, _testItem.CatalogBrandId, _testItem.CatalogTypeId, _testItem.PictureFileName);
+        var result = await _catalogService.CreateAsync(
+            _testItem.Title,
+            _testItem.CoverFileName,
+            _testItem.Description,
+            _testItem.Imdb,
+            _testItem.Year,
+            _testItem.Price);
 
         // assert
         result.Should().Be(testResult);
@@ -62,17 +71,114 @@ public class CatalogItemServiceTest
         // arrange
         int? testResult = null;
 
-        _catalogItemRepository.Setup(s => s.Add(
-            It.IsAny<string>(),
-            It.IsAny<string>(),
-            It.IsAny<decimal>(),
-            It.IsAny<int>(),
-            It.IsAny<int>(),
-            It.IsAny<int>(),
-            It.IsAny<string>())).ReturnsAsync(testResult);
+        _catalogItemRepository.Setup(
+            s => s.CreateAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<double>(),
+                It.IsAny<int>(),
+                It.IsAny<double>())).ReturnsAsync(testResult);
 
         // act
-        var result = await _catalogService.AddAsync(_testItem.Name, _testItem.Description, _testItem.Price, _testItem.AvailableStock, _testItem.CatalogBrandId, _testItem.CatalogTypeId, _testItem.PictureFileName);
+        var result = await _catalogService.CreateAsync(
+            _testItem.Title,
+            _testItem.CoverFileName,
+            _testItem.Description,
+            _testItem.Imdb,
+            _testItem.Year,
+            _testItem.Price);
+
+        // assert
+        result.Should().Be(testResult);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_Success()
+    {
+        // arrange
+        var testResult = true;
+
+        _catalogItemRepository.Setup(
+            s => s.UpdateAsync(
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<double>(),
+                It.IsAny<int>(),
+                It.IsAny<double>())).ReturnsAsync(testResult);
+
+        // act
+        var result = await _catalogService.UpdateAsync(
+            _testItem.Id,
+            _testItem.Title,
+            _testItem.CoverFileName,
+            _testItem.Description,
+            _testItem.Imdb,
+            _testItem.Year,
+            _testItem.Price);
+
+        // assert
+        result.Should().Be(testResult);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_Failed()
+    {
+        // arrange
+        var testResult = false;
+
+        _catalogItemRepository.Setup(
+            s => s.UpdateAsync(
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<double>(),
+                It.IsAny<int>(),
+                It.IsAny<double>())).ReturnsAsync(testResult);
+
+        // act
+        var result = await _catalogService.UpdateAsync(
+            _testItem.Id,
+            _testItem.Title,
+            _testItem.CoverFileName,
+            _testItem.Description,
+            _testItem.Imdb,
+            _testItem.Year,
+            _testItem.Price);
+
+        // assert
+        result.Should().Be(testResult);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_Success()
+    {
+        // arrange
+        var testResult = true;
+
+        _catalogItemRepository.Setup(s => s.DeleteAsync(It.IsAny<int>()))
+            .ReturnsAsync(testResult);
+
+        // act
+        var result = await _catalogService.DeleteAsync(_testItem.Id);
+
+        // assert
+        result.Should().Be(testResult);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_Failed()
+    {
+        // arrange
+        var testResult = false;
+
+        _catalogItemRepository.Setup(s => s.DeleteAsync(It.IsAny<int>())).ReturnsAsync(testResult);
+
+        // act
+        var result = await _catalogService.DeleteAsync(_testItem.Id);
 
         // assert
         result.Should().Be(testResult);

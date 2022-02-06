@@ -8,9 +8,14 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<CatalogItem, CatalogItemDto>()
-            .ForMember("PictureUrl", opt
-                => opt.MapFrom<CatalogItemPictureResolver, string>(c => c.PictureFileName));
-        CreateMap<CatalogBrand, CatalogBrandDto>();
-        CreateMap<CatalogType, CatalogTypeDto>();
+            .ForMember(
+                "PictureUrl",
+                opt
+                    => opt.MapFrom<CatalogItemPictureResolver, string>(c => c.CoverFileName))
+            .ForMember(
+                "Genres",
+                opt
+                    => opt.MapFrom<CatalogGenresResolver, List<CatalogItemGenre>>(c => c.CatalogItemGenres));
+        CreateMap<CatalogGenre, CatalogGenreDto>();
     }
 }
