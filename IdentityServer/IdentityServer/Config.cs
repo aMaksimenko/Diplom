@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 using Microsoft.Extensions.Configuration;
 
 namespace IdentityServer
@@ -45,10 +46,20 @@ namespace IdentityServer
                 {
                     ClientId = "mvc_pkce",
                     ClientName = "MVC PKCE Client",
-                    AllowedGrantTypes = GrantTypes.Code,
-                    ClientSecrets = {new Secret("secret".Sha256())},
-                    RedirectUris = { $"{configuration["MvcUrl"]}/signin-oidc"},
-                    AllowedScopes = {"openid", "profile", "mvc"},
+                    AllowedGrantTypes = { GrantType.AuthorizationCode },
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    RedirectUris =
+                    {
+                        "http://www.alevelwebsite.com/signin-oidc",
+                        "http://www.alevelwebsite.com/silentrenew",
+                        "http://www.alevelwebsite.com/logout/callback"
+                    },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "mvc"
+                    },
                     RequirePkce = true,
                     RequireConsent = false
                 },

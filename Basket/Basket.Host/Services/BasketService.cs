@@ -12,14 +12,15 @@ public class BasketService : IBasketService
         _cacheService = cacheService;
     }
     
-    public async Task TestAdd(string userId, string data)
+    public async Task UpdateItems(string userId, string data)
     {
        await _cacheService.AddOrUpdateAsync(userId, data);
     }
 
-    public async Task<TestGetResponse> TestGet(string userId)
+    public async Task<GetItemsResponse> GetItems(string userId)
     {
         var result = await _cacheService.GetAsync<string>(userId);
-        return new TestGetResponse() { Data = result };
+        
+        return new GetItemsResponse() { Data = result };
     }
 }

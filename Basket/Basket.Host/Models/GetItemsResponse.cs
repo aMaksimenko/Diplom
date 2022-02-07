@@ -1,6 +1,6 @@
 namespace Basket.Host.Models;
 
-public class TestGetResponse
+public class GetItemsResponse
 {
     public string Data { get; set; } = null!;
 }

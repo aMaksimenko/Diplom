@@ -20,22 +20,24 @@ public class BasketBffController : ControllerBase
         _logger = logger;
         _basketService = basketService;
     }
-    
+
     [HttpPost]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> TestAdd(TestAddRequest data)
+    [ProducesResponseType(typeof(UpdateItemsResponse), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> UpdateItems(UpdateItemsRequest data)
     {
         var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        await _basketService.TestAdd(basketId!, data.Data);
-        return Ok();
+
+        await _basketService.UpdateItems(basketId!, data.Data);
+        return Ok(new UpdateItemsResponse() { IsSuccess = true });
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(TestGetResponse), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> TestGet()
+    [ProducesResponseType(typeof(GetItemsResponse), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetItems()
     {
         var basketId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-        var response = await _basketService.TestGet(basketId!);
+        var response = await _basketService.GetItems(basketId!);
+
         return Ok(response);
     }
 }

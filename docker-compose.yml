@@ -1,22 +1,22 @@
 version: '3.8'
 
 services:
-  #  basket.api:
-  #    container_name: lde.basket.api
-  #    build:
-  #      context: .
-  #      dockerfile: Basket/Basket.Host/Dockerfile
-  #    environment:
-  #      - ASPNETCORE_ENVIRONMENT=Development
-  #      - ASPNETCORE_URLS=http://+:5003
-  #      - Authorization__Authority=http://www.alevelwebsite.com:5002
-  #      - Redis__Host=www.alevelwebsite.com:6380
-  #      - Redis__CacheTimeout=00:00:10
-  #      - PathBase=http://www.alevelwebsite.com:5003
-  #    depends_on:
-  #      - redis
-  #    ports:
-  #      - 5003:5003
+  basket.api:
+    container_name: lde.basket.api
+    build:
+      context: .
+      dockerfile: Basket/Basket.Host/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5003
+      - Authorization__Authority=http://www.alevelwebsite.com:5002
+      - Redis__Host=www.alevelwebsite.com:6380
+      - Redis__CacheTimeout=24:00:00
+      - PathBase=http://www.alevelwebsite.com:5003
+    depends_on:
+      - redis
+    ports:
+      - 5003:5003
   
   catalog.api:
     container_name: lde.catalog.api
@@ -65,11 +65,11 @@ services:
     ports:
       - 5433:5432
 
-#  redis:
-#    image: redis
-#    container_name: lde.redis
-#    ports:
-#      - 6380:6379
+  redis:
+    image: redis
+    container_name: lde.redis
+    ports:
+      - 6380:6379
 
 networks:
   dockernet:
