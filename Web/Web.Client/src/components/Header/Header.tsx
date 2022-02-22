@@ -17,7 +17,8 @@ const Header = observer(() => {
   const navigate = useNavigate()
   const authStore = useInjection<AuthStore>(types.AuthStore)
   const cartStore = useInjection<CartStore>(types.CartStore)
-
+  const sumTotal = cartStore.products.length + cartStore.streams.length
+  
   return (
     <AppBar position="static">
       <Container>
@@ -35,7 +36,7 @@ const Header = observer(() => {
           {!!authStore.user ? (
             <Box>
               <IconButton size="large" onClick={() => navigate('/order')}>
-                <Badge badgeContent={cartStore.items.length} color="primary">
+                <Badge badgeContent={sumTotal} color="primary">
                   <ShoppingCartIcon/>
                 </Badge>
               </IconButton>

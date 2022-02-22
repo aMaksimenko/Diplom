@@ -13,7 +13,32 @@ public class CatalogItemPictureResolver : IMemberValueResolver<CatalogItem, Cata
         _config = config.Value;
     }
 
-    public object Resolve(CatalogItem source, CatalogItemDto destination, string sourceMember, object destMember, ResolutionContext context)
+    public object Resolve(
+        CatalogItem source,
+        CatalogItemDto destination,
+        string sourceMember,
+        object destMember,
+        ResolutionContext context)
+    {
+        return $"{_config.CdnHost}/{_config.ImgUrl}/{sourceMember}";
+    }
+}
+
+public class CatalogStreamPictureResolver : IMemberValueResolver<CatalogStream, CatalogStreamDto, string, object>
+{
+    private readonly CatalogConfig _config;
+
+    public CatalogStreamPictureResolver(IOptionsSnapshot<CatalogConfig> config)
+    {
+        _config = config.Value;
+    }
+
+    public object Resolve(
+        CatalogStream source,
+        CatalogStreamDto destination,
+        string sourceMember,
+        object destMember,
+        ResolutionContext context)
     {
         return $"{_config.CdnHost}/{_config.ImgUrl}/{sourceMember}";
     }

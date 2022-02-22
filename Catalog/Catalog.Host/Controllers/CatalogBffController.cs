@@ -34,6 +34,7 @@ public class CatalogBffController : ControllerBase
     public async Task<IActionResult> Items(PaginatedItemsRequest<CatalogTypeFilter> request)
     {
         var result = await _catalogService.GetCatalogItemsAsync(request.PageSize, request.PageIndex, request.Filters);
+
         return Ok(result);
     }
 
@@ -43,6 +44,26 @@ public class CatalogBffController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var result = await _catalogService.GetByIdAsync(id);
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(PaginatedItemsResponse<CatalogStreamDto>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> Streams(PaginatedItemsRequest<CatalogTypeFilter> request)
+    {
+        var result = await _catalogService.GetCatalogStreamsAsync(request.PageSize, request.PageIndex);
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(CatalogStreamDto), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> GetStreamById(int id)
+    {
+        var result = await _catalogService.GetStreamByIdAsync(id);
 
         return Ok(result);
     }

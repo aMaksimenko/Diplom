@@ -43,6 +43,7 @@ builder.Services.AddSwaggerGen(
                         {
                             { "mvc", "description" },
                             { "catalog.catalogitem", "description" },
+                            { "catalog.catalogstream", "description" },
                             { "catalog.cataloggenre", "description" }
                         }
                     }
@@ -61,8 +62,10 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddTransient<ICatalogItemRepository, CatalogItemRepository>();
 builder.Services.AddTransient<ICatalogGenreRepository, CatalogGenreRepository>();
+builder.Services.AddTransient<ICatalogStreamRepository, CatalogStreamRepository>();
 builder.Services.AddTransient<ICatalogService, CatalogService>();
 builder.Services.AddTransient<ICatalogItemService, CatalogItemService>();
+builder.Services.AddTransient<ICatalogStreamService, CatalogStreamService>();
 builder.Services.AddTransient<ICatalogGenreService, CatalogGenreService>();
 
 builder.Services.AddDbContextFactory<ApplicationDbContext>(opts => opts.UseNpgsql(configuration["ConnectionString"]));

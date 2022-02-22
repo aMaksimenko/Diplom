@@ -10,16 +10,19 @@ namespace Catalog.Host.Services;
 public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogService
 {
     private readonly ICatalogItemRepository _catalogItemRepository;
+    private readonly ICatalogStreamRepository _catalogStreamRepository;
     private readonly IMapper _mapper;
 
     public CatalogService(
         IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
         ILogger<BaseDataService<ApplicationDbContext>> logger,
         ICatalogItemRepository catalogItemRepository,
+        ICatalogStreamRepository catalogStreamRepository,
         IMapper mapper)
         : base(dbContextWrapper, logger)
     {
         _catalogItemRepository = catalogItemRepository;
+        _catalogStreamRepository = catalogStreamRepository;
         _mapper = mapper;
     }
 
@@ -57,6 +60,41 @@ public class CatalogService : BaseDataService<ApplicationDbContext>, ICatalogSer
                 };
 
                 return response;
+            });
+    }
+
+    public async Task<PaginatedItemsResponse<CatalogStreamDto>?> GetCatalogStreamsAsync(int pageSize, int pageIndex)
+    {
+        return await ExecuteSafeAsync(
+            async () =>
+            {
+                var result = await _catalogStreamRepository.GetByPageAsync(pageIndex, pageSize);
+
+                if (result == null)
+                {
+                    return null;
+                }
+
+                var response = new PaginatedItemsResponse<CatalogStreamDto>()
+                {
+                    Count = result.TotalCount,
+                    Data = result.Data.Select(s => _mapper.Map<CatalogStreamDto>(s)).ToList(),
+                    PageIndex = pageIndex,
+                    PageSize = pageSize
+                };
+
+                return response;
+            });
+    }
+
+    public async Task<CatalogStreamDto> GetStreamByIdAsync(int id)
+    {
+        return await ExecuteSafeAsync(
+            async () =>
+            {
+                var result = await _catalogStreamRepository.GetByIdAsync(id);
+
+                return _mapper.Map<CatalogStreamDto>(result);
             });
     }
 

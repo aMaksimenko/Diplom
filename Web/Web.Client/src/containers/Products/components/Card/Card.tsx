@@ -15,16 +15,22 @@ const ProductCard: FC<ProductCardProps> = observer(({ data }) => {
   const { title, pictureUrl, id } = data
   const navigate = useNavigate()
   const cartStore = useInjection<CartStore>(types.CartStore)
-  const isAdded = cartStore.contains(id)
+  const isAdded = cartStore.containsProduct(id)
 
   return (
     <Card>
-      <CardActionArea onClick={() => navigate(`/landing/${id}`)}>
+      <CardActionArea onClick={() => navigate(`/product/${id}`)}>
         <CardMedia
           component="img"
           height="300"
           image={pictureUrl}
           alt={title}
+          sx={{
+            transition: 'transform 1s ease-out',
+            '&:hover': {
+              transform: 'scale(1.2)'
+            }
+          }}
         />
       </CardActionArea>
       <CardActions disableSpacing>
@@ -33,7 +39,7 @@ const ProductCard: FC<ProductCardProps> = observer(({ data }) => {
           size="small"
           variant="outlined"
           startIcon={isAdded ? <DoneOutlineIcon/> : <AddShoppingCartIcon/>}
-          onClick={() => cartStore.add(data)}
+          onClick={() => cartStore.addProduct(data)}
           disabled={isAdded}
         >
           {isAdded ? 'In cart ' : 'Buy'}

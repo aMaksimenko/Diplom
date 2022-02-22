@@ -32,6 +32,7 @@ namespace IdentityServer
                     Scopes = new List<Scope>
                     {
                         new Scope("catalog.catalogitem"),
+                        new Scope("catalog.catalogstream"),
                         new Scope("catalog.cataloggenre"),
                     },
                 }
@@ -88,7 +89,7 @@ namespace IdentityServer
 
                     AllowedScopes =
                     {
-                        "mvc", "catalog.catalogitem", "catalog.cataloggenre"
+                        "mvc", "catalog.catalogitem", "catalog.cataloggenre", "catalog.catalogstream"
                     }
                 },
                 new Client

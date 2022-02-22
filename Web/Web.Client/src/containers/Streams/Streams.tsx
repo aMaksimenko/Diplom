@@ -1,23 +1,24 @@
 import React, { useEffect } from 'react'
 import { types, useInjection } from 'ioc'
-import ProductsStore from './Products.store'
+import ProductsStore from './Streams.store'
 import { observer } from 'mobx-react-lite'
-import ProductCard from './components/Card'
+import Card from './components/Card'
 import { Box, Container, Grid, Pagination } from '@mui/material'
+import StreamsStore from './Streams.store'
 
 const Products = observer(() => {
-  const store = useInjection<ProductsStore>(types.ProductsStore)
+  const store = useInjection<StreamsStore>(types.StreamsStore)
 
   useEffect(() => {
-    store.getProductsAsync()
+    store.getStreamsByPage()
   }, [store, store.pageIndex])
 
   return (
     <Container sx={{ mb: 4 }}>
       <Grid container spacing={4} justifyContent="center" mb={4}>
         {store.products.map((item) => (
-          <Grid key={item.id} item lg={2} md={4} xs={6}>
-            <ProductCard data={item}/>
+          <Grid key={item.id} item lg={4} md={6} xs={12}>
+            <Card data={item}/>
           </Grid>
         ))}
       </Grid>

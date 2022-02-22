@@ -40,6 +40,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{CB7B93
 		Proxy\assets\images\pulp-fiction.jpg = Proxy\assets\images\pulp-fiction.jpg
 		Proxy\assets\images\schindlers-list.jpg = Proxy\assets\images\schindlers-list.jpg
 		Proxy\assets\images\shawshank-redemption.jpg = Proxy\assets\images\shawshank-redemption.jpg
+		Proxy\assets\images\hbo.png = Proxy\assets\images\hbo.png
+		Proxy\assets\images\disney.jpg = Proxy\assets\images\disney.jpg
+		Proxy\assets\images\netflix.jpeg = Proxy\assets\images\netflix.jpeg
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gateway", "gateway", "{2167BBAD-8899-47A8-8AFE-DEA70EF8611B}"

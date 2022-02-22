@@ -12,6 +12,13 @@ public interface ICatalogService
         Dictionary<CatalogTypeFilter, int>? filters);
 
     Task<CatalogItemDto> GetByIdAsync(int id);
+
+    Task<PaginatedItemsResponse<CatalogStreamDto>?> GetCatalogStreamsAsync(
+        int pageSize,
+        int pageIndex);
+
+    Task<CatalogStreamDto> GetStreamByIdAsync(int id);
+
     Task<IEnumerable<CatalogItemDto>> GetByGenreAsync(int genreId);
     Task<IEnumerable<CatalogGenreDto>> GetGenresAsync();
 }

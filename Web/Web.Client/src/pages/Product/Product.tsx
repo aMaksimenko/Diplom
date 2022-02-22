@@ -1,7 +1,7 @@
 import React from 'react'
 import Product from 'containers/Product'
 
-const LandingPage = () => {
+const ProductPage = () => {
   return (
     <>
       <Product />
@@ -9,4 +9,4 @@ const LandingPage = () => {
   )
 }
 
-export default LandingPage
+export default ProductPage

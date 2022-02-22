@@ -9,7 +9,8 @@ import { LogoutCallback } from 'components/auth/LogoutCallback'
 import { SilentRenew } from 'components/auth/SilentRenew'
 
 const Home = React.lazy(() => import('pages/Home'))
-const Landing = React.lazy(() => import('pages/Landing'))
+const Product = React.lazy(() => import('pages/Product'))
+const Stream = React.lazy(() => import('pages/Stream'))
 const Login = React.lazy(() => import('pages/Login'))
 const Order = React.lazy(() => import('pages/Order'))
 
@@ -23,7 +24,8 @@ const App = () => {
           <Route path="/logout/callback" element={<LogoutCallback/>}/>
           <Route path="/silentrenew" element={<SilentRenew/>}/>
           <Route index element={<Home/>}/>
-          <Route path="/landing/:id" element={<Landing/>}/>
+          <Route path="/product/:id" element={<Product/>}/>
+          <Route path="/stream/:id" element={<Stream/>}/>
           <Route element={<PrivateOutlet/>}>
             <Route path="/login" element={<Login/>}/>
             <Route path="/order" element={<Order/>}/>

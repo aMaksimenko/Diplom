@@ -28,6 +28,13 @@ public static class DbInitializer
 
             await context.SaveChangesAsync();
         }
+
+        if (!context.CatalogStreams.Any())
+        {
+            await context.CatalogStreams.AddRangeAsync(GetPreconfiguredStreams());
+
+            await context.SaveChangesAsync();
+        }
     }
 
     private static IEnumerable<CatalogGenre> GetPreconfiguredCatalogGenres()
@@ -41,6 +48,37 @@ public static class DbInitializer
             new CatalogGenre() { Genre = "Drama" },
             new CatalogGenre() { Genre = "Fantasy" },
             new CatalogGenre() { Genre = "Thriller" }
+        };
+    }
+
+    private static IEnumerable<CatalogStream> GetPreconfiguredStreams()
+    {
+        return new List<CatalogStream>()
+        {
+            new CatalogStream()
+            {
+                Title = "Netflix",
+                CoverFileName = "netflix.jpeg",
+                Description =
+                    "Netflix is a subscription-based streaming service that allows our members to watch TV shows and movies without commercials on an internet-connected device. You can also download TV shows and movies to your iOS, Android, or Windows 10 device and watch without an internet connection.",
+                Price = 7.99,
+            },
+            new CatalogStream()
+            {
+                Title = "Disney+",
+                CoverFileName = "disney.jpg",
+                Description =
+                    "Disney+ is the home for your favorite movies and TV shows from Disney, Pixar, Marvel, Star Wars, and National Geographic.",
+                Price = 9.99,
+            },
+            new CatalogStream()
+            {
+                Title = "HBO Max",
+                CoverFileName = "hbo.png",
+                Description =
+                    "It's a platform offered by WarnerMedia that features 10,000 hours of premium content bundling all of HBO together with even more movies, shows, and Max Originals for the whole family, including Friends, South Park, The Big Bang Theory, Peacemaker, Hacks, Wonder Woman, the Studio Ghibli collection, and more.",
+                Price = 8.99,
+            },
         };
     }
 

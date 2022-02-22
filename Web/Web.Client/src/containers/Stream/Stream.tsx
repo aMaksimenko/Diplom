@@ -1,22 +1,21 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { types, useInjection } from 'ioc'
-import ProductStore from './Product.store'
+import StreamStore from './Stream.store'
 import { observer } from 'mobx-react-lite'
 import { Box, Button, Container, Grid, Stack, Typography } from '@mui/material'
-import GenreList from 'components/GenreList'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart'
 import CartStore from 'stores/CartStore'
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline'
 
-const Product = observer(() => {
+const Stream = observer(() => {
   const params = useParams()
-  const store = useInjection<ProductStore>(types.ProductStore)
+  const store = useInjection<StreamStore>(types.StreamStore)
   const cartStore = useInjection<CartStore>(types.CartStore)
 
   useEffect(() => {
     if (params.id) {
-      store.getProductAsync(Number(params.id))
+      store.getStreamAsync(Number(params.id))
     }
   }, [params, store])
 
@@ -25,14 +24,14 @@ const Product = observer(() => {
   }
 
   const { title, pictureUrl, imdb, year, genres, id, description } = store.product
-  const isAdded = cartStore.containsProduct(id)
+  const isAdded = cartStore.containsStream(id)
 
   return (
     <Container>
+      <Box mb={4}>
+        <img src={pictureUrl} alt={title} style={{ width: '100%' }}/>
+      </Box>
       <Grid container spacing={4}>
-        <Grid item xs={12} sm={4}>
-          <img src={pictureUrl} alt={title} style={{ width: '100%' }}/>
-        </Grid>
         <Grid item xs={12} sm={8}>
           <Typography variant="h4" fontWeight={700} mb={4}>
             {title}
@@ -41,19 +40,14 @@ const Product = observer(() => {
             <Typography>
               {description}
             </Typography>
-            <Box>IMDB: <strong>{imdb}</strong></Box>
-            <Box>Year: <strong>{year}</strong></Box>
-            <Box>
-              Genre: <GenreList items={genres}/>
-            </Box>
           </Stack>
           <Button
             variant="outlined"
             startIcon={isAdded ? <DoneOutlineIcon/> : <AddShoppingCartIcon/>}
-            onClick={() => cartStore.addProduct(store.product)}
+            onClick={() => cartStore.addStream(store.product)}
             disabled={isAdded}
           >
-            {isAdded ? 'In cart ' : 'Buy'}
+            {isAdded ? 'In cart ' : 'Subscribe'}
           </Button>
         </Grid>
       </Grid>
@@ -61,4 +55,4 @@ const Product = observer(() => {
   )
 })
 
-export default Product
+export default Stream

@@ -13,6 +13,8 @@ export interface IProductService {
   getItemById: (id: number) => Promise<any>
   getItemsByIds: (id: number[]) => Promise<any>
   getItemsByGenre: (id: number) => Promise<any>
+  getStreamsByPage: ({ pageIndex, pageSize }: getItemsByPageProps) => Promise<any>
+  getStreamById: (id: number) => Promise<any>
 }
 
 @injectable()
@@ -36,7 +38,18 @@ export default class ProductService implements IProductService {
     genreId: id
   })
 
+  public readonly getStreamsByPage = (
+    {
+      pageIndex,
+      pageSize
+    }: getItemsByPageProps) => this._httpService.sendAsync(`${this._urlPath}/streams`, {
+    pageIndex,
+    pageSize
+  })
+
+  public readonly getStreamById = (id: number) => this._httpService.sendAsync(`${this._urlPath}/getStreamById?id=${id}`)
+
   getItemsByIds (id: number[]): Promise<any> {
-    return Promise.resolve(undefined);
+    return Promise.resolve(undefined)
   }
 }

@@ -10,6 +10,7 @@ public class CatalogServiceTest
     private readonly ICatalogService _catalogService;
 
     private readonly Mock<ICatalogItemRepository> _catalogItemRepository;
+    private readonly Mock<ICatalogStreamRepository> _catalogStreamRepository;
     private readonly Mock<IMapper> _mapper;
     private readonly Mock<IDbContextWrapper<ApplicationDbContext>> _dbContextWrapper;
     private readonly Mock<ILogger<CatalogService>> _logger;
@@ -17,6 +18,7 @@ public class CatalogServiceTest
     public CatalogServiceTest()
     {
         _catalogItemRepository = new Mock<ICatalogItemRepository>();
+        _catalogStreamRepository = new Mock<ICatalogStreamRepository>();
         _mapper = new Mock<IMapper>();
         _dbContextWrapper = new Mock<IDbContextWrapper<ApplicationDbContext>>();
         _logger = new Mock<ILogger<CatalogService>>();
@@ -29,6 +31,7 @@ public class CatalogServiceTest
             _dbContextWrapper.Object,
             _logger.Object,
             _catalogItemRepository.Object,
+            _catalogStreamRepository.Object,
             _mapper.Object);
     }
 
