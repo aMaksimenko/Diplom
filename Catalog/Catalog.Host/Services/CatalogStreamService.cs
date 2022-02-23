@@ -33,18 +33,18 @@ public class CatalogStreamService : BaseDataService<ApplicationDbContext>, ICata
 
     public Task<bool> UpdateAsync(
         int id,
-        string title,
-        string coverFileName,
-        string description,
-        double price)
+        string? title,
+        string? coverFileName,
+        string? description,
+        double? price)
     {
         return ExecuteSafeAsync(
             () => _catalogStreamRepository.UpdateAsync(
-                id,
-                title,
-                coverFileName,
-                description,
-                price));
+                id: id,
+                title: title,
+                coverFileName: coverFileName,
+                description: description,
+                price: price));
     }
 
     public Task<bool> DeleteAsync(int id)

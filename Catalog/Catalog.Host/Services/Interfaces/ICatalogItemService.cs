@@ -12,12 +12,12 @@ public interface ICatalogItemService
 
     Task<bool> UpdateAsync(
         int id,
-        string title,
-        string coverFileName,
-        string description,
-        double imdb,
-        int year,
-        double price);
+        string? title,
+        string? coverFileName,
+        string? description,
+        double? imdb,
+        int? year,
+        double? price);
 
     Task<bool> DeleteAsync(int id);
 }

@@ -60,19 +60,19 @@ public class CatalogStreamRepository : ICatalogStreamRepository
 
     public async Task<bool> UpdateAsync(
         int id,
-        string title,
-        string coverFileName,
-        string description,
-        double price)
+        string? title,
+        string? coverFileName,
+        string? description,
+        double? price)
     {
         var item = await _dbContext.CatalogStreams.FirstOrDefaultAsync(ci => ci.Id == id);
 
         if (item != null)
         {
-            item.Title = title;
-            item.CoverFileName = coverFileName;
-            item.Description = description;
-            item.Price = price;
+            item.Title = title ?? item.Title;
+            item.CoverFileName = coverFileName ?? item.CoverFileName;
+            item.Description = description ?? item.Description;
+            item.Price = price ?? item.Price;
 
             _dbContext.CatalogStreams.Update(item);
             await _dbContext.SaveChangesAsync();

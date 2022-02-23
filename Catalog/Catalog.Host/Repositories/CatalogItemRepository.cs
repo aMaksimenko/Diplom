@@ -97,23 +97,23 @@ public class CatalogItemRepository : ICatalogItemRepository
 
     public async Task<bool> UpdateAsync(
         int id,
-        string title,
-        string coverFileName,
-        string description,
-        double imdb,
-        int year,
-        double price)
+        string? title,
+        string? coverFileName,
+        string? description,
+        double? imdb,
+        int? year,
+        double? price)
     {
         var item = await _dbContext.CatalogItems.FirstOrDefaultAsync(ci => ci.Id == id);
 
         if (item != null)
         {
-            item.Title = title;
-            item.CoverFileName = coverFileName;
-            item.Description = description;
-            item.Imdb = imdb;
-            item.Year = year;
-            item.Price = price;
+            item.Title = title ?? item.Title;
+            item.CoverFileName = coverFileName ?? item.CoverFileName;
+            item.Description = description ?? item.Description;
+            item.Imdb = imdb ?? item.Imdb;
+            item.Year = year ?? item.Year;
+            item.Price = price ?? item.Price;
 
             _dbContext.CatalogItems.Update(item);
             await _dbContext.SaveChangesAsync();

@@ -2,6 +2,8 @@ using Catalog.Host.Configurations;
 using Catalog.Host.Models.Dtos;
 using Catalog.Host.Models.Enums;
 using Catalog.Host.Models.Requests;
+using Catalog.Host.Models.Requests.Product;
+using Catalog.Host.Models.Requests.Stream;
 using Catalog.Host.Models.Response;
 using Catalog.Host.Services.Interfaces;
 using Infrastructure.Identity;
@@ -41,9 +43,9 @@ public class CatalogBffController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(typeof(CatalogItemDto), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(GetByIdProductRequest request)
     {
-        var result = await _catalogService.GetByIdAsync(id);
+        var result = await _catalogService.GetByIdAsync(request.Id);
 
         return Ok(result);
     }
@@ -61,9 +63,9 @@ public class CatalogBffController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(typeof(CatalogStreamDto), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetStreamById(int id)
+    public async Task<IActionResult> GetStreamById(GetByIdStreamRequest request)
     {
-        var result = await _catalogService.GetStreamByIdAsync(id);
+        var result = await _catalogService.GetStreamByIdAsync(request.Id);
 
         return Ok(result);
     }
@@ -71,9 +73,9 @@ public class CatalogBffController : ControllerBase
     [HttpPost]
     [AllowAnonymous]
     [ProducesResponseType(typeof(CatalogItemDto), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> GetByGenre(int genreId)
+    public async Task<IActionResult> GetByGenre(GetByGenreIdProductRequest request)
     {
-        var result = await _catalogService.GetByGenreAsync(genreId);
+        var result = await _catalogService.GetByGenreAsync(request.GenreId);
 
         return Ok(result);
     }

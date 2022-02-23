@@ -5,16 +5,24 @@ import { IHttpService } from 'services/HttpService'
 
 type getItemsByPageProps = {
   pageIndex: number
+  pageSize: number,
+  filters: {
+    genre?: string
+  }
+}
+
+type getStreamsByPageProps = {
+  pageIndex: number
   pageSize: number
 }
 
 export interface IProductService {
-  getItemsByPage: ({ pageIndex, pageSize }: getItemsByPageProps) => Promise<any>
+  getItemsByPage: ({ pageIndex, pageSize, filters: { genre } }: getItemsByPageProps) => Promise<any>
   getItemById: (id: number) => Promise<any>
-  getItemsByIds: (id: number[]) => Promise<any>
   getItemsByGenre: (id: number) => Promise<any>
-  getStreamsByPage: ({ pageIndex, pageSize }: getItemsByPageProps) => Promise<any>
+  getStreamsByPage: ({ pageIndex, pageSize }: getStreamsByPageProps) => Promise<any>
   getStreamById: (id: number) => Promise<any>
+  getGenres: () => Promise<any>
 }
 
 @injectable()
@@ -26,13 +34,15 @@ export default class ProductService implements IProductService {
   public readonly getItemsByPage = (
     {
       pageIndex,
-      pageSize
+      pageSize,
+      filters
     }: getItemsByPageProps) => this._httpService.sendAsync(`${this._urlPath}/items`, {
     pageIndex,
-    pageSize
+    pageSize,
+    filters
   })
 
-  public readonly getItemById = (id: number) => this._httpService.sendAsync(`${this._urlPath}/getById?id=${id}`)
+  public readonly getItemById = (id: number) => this._httpService.sendAsync(`${this._urlPath}/getById`, { id })
 
   public readonly getItemsByGenre = (id: number) => this._httpService.sendAsync(`${this._urlPath}/getByGenre`, {
     genreId: id
@@ -42,14 +52,12 @@ export default class ProductService implements IProductService {
     {
       pageIndex,
       pageSize
-    }: getItemsByPageProps) => this._httpService.sendAsync(`${this._urlPath}/streams`, {
+    }: getStreamsByPageProps) => this._httpService.sendAsync(`${this._urlPath}/streams`, {
     pageIndex,
     pageSize
   })
 
-  public readonly getStreamById = (id: number) => this._httpService.sendAsync(`${this._urlPath}/getStreamById?id=${id}`)
+  public readonly getStreamById = (id: number) => this._httpService.sendAsync(`${this._urlPath}/getStreamById`, { id })
 
-  getItemsByIds (id: number[]): Promise<any> {
-    return Promise.resolve(undefined)
-  }
+  public readonly getGenres = () => this._httpService.sendAsync(`${this._urlPath}/getGenres`)
 }

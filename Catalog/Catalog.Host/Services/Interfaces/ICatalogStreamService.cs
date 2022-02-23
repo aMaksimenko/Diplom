@@ -10,10 +10,10 @@ public interface ICatalogStreamService
 
     Task<bool> UpdateAsync(
         int id,
-        string title,
-        string coverFileName,
-        string description,
-        double price);
+        string? title,
+        string? coverFileName,
+        string? description,
+        double? price);
 
     Task<bool> DeleteAsync(int id);
 }

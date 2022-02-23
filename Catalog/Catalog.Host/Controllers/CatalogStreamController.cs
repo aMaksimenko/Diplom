@@ -41,11 +41,11 @@ public class CatalogStreamController : ControllerBase
     public async Task<IActionResult> Update(UpdateStreamRequest request)
     {
         await _catalogStreamService.UpdateAsync(
-            request.Id,
-            request.Title,
-            request.CoverFileName,
-            request.Description,
-            request.Price);
+            id: request.Id,
+            title: request.Title,
+            coverFileName: request.CoverFileName,
+            description: request.Description,
+            price: request.Price);
 
         return Ok();
     }

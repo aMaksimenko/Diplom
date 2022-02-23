@@ -37,22 +37,22 @@ public class CatalogItemService : BaseDataService<ApplicationDbContext>, ICatalo
 
     public Task<bool> UpdateAsync(
         int id,
-        string title,
-        string coverFileName,
-        string description,
-        double imdb,
-        int year,
-        double price)
+        string? title,
+        string? coverFileName,
+        string? description,
+        double? imdb,
+        int? year,
+        double? price)
     {
         return ExecuteSafeAsync(
             () => _catalogItemRepository.UpdateAsync(
-                id,
-                title,
-                coverFileName,
-                description,
-                imdb,
-                year,
-                price));
+                id: id,
+                title: title,
+                coverFileName: coverFileName,
+                description: description,
+                imdb: imdb,
+                year: year,
+                price: price));
     }
 
     public Task<bool> DeleteAsync(int id)

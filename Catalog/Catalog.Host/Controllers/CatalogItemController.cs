@@ -43,13 +43,13 @@ public class CatalogItemController : ControllerBase
     public async Task<IActionResult> Update(UpdateProductRequest request)
     {
         await _catalogItemService.UpdateAsync(
-            request.Id,
-            request.Title,
-            request.CoverFileName,
-            request.Description,
-            request.Imdb,
-            request.Year,
-            request.Price);
+            id: request.Id,
+            title: request.Title,
+            coverFileName: request.CoverFileName,
+            description: request.Description,
+            imdb: request.Imdb,
+            year: request.Year,
+            price: request.Price);
 
         return Ok();
     }

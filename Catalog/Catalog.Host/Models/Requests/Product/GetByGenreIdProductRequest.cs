@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Catalog.Host.Models.Requests.Product;
 
-public class DeleteProductRequest
+public class GetByGenreIdProductRequest
 {
     [Required]
-    public int Id { get; set; }
+    public int GenreId { get; set; }
 }

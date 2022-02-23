@@ -22,7 +22,7 @@ const ProductCard: FC<ProductCardProps> = observer(({ data }) => {
       <CardActionArea onClick={() => navigate(`/product/${id}`)}>
         <CardMedia
           component="img"
-          height="300"
+          height="450"
           image={pictureUrl}
           alt={title}
           sx={{
